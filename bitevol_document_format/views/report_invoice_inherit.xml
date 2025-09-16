@@ -1,11 +1,15 @@
 <odoo>
     <template id="report_invoice_document_inherit_no_default_code"
               inherit_id="account.report_invoice_document">
-        <!-- Reemplazamos SOLO la celda de descripción -->
-        <xpath expr="//td[@name='account_invoice_line_name']" position="replace">
+         <xpath expr="//td[@name='account_invoice_line_name']" position="replace">
             <td name="account_invoice_line_name">
-                    <!-- Si no hay producto, mostramos la descripción tal cual -->
-                    <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                <t t-set="pos" t-value="line.name.find(']')"/>
+                <t t-if="pos != -1">
+                    <span t-out="line.name[pos+1:].strip()"/>
+                </t>
+                <t t-else="">
+                    <span t-out="line.name"/>
+                </t>
             </td>
         </xpath>
     </template>
