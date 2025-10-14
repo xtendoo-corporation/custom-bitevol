@@ -3,13 +3,17 @@
               inherit_id="account.report_invoice_document">
          <xpath expr="//td[@name='account_invoice_line_name']" position="replace">
             <td name="account_invoice_line_name">
-                <t t-set="pos" t-value="line.name.find(']')"/>
-                <t t-if="pos != -1">
-                    <span t-out="line.name[pos+1:].strip()"/>
-                </t>
-                <t t-else="">
-                    <span t-out="line.name"/>
-                </t>
+                <t t-set="search_term" t-value="line.product_id.name or ''"/>
+            <t t-set="pos" t-value="line.name.find(search_term)"/>
+
+            <t t-if="pos != -1">
+                <!-- Si lo encuentra, mostramos desde después del nombre del producto -->
+                <span t-out="line.name[pos + len(search_term):].strip()"/>
+            </t>
+            <t t-else="">
+                <!-- Si no lo encuentra, mostramos el nombre entero -->
+                <span t-out="line.name"/>
+            </t>
             </td>
         </xpath>
     </template>
